@@ -7,15 +7,62 @@ public class LeapPlayer : NetworkBehaviour
 {
     public float delay = 0.1f;
 
+    void Start()
+    {
+        Debug.Log("Leap Player Start");
+        Debug.Log(transform.position);
+    }
+
+    void Update()
+    {
+        if (lastLeftFinish)
+        {
+            CmdFinishHand(0);
+            lastLeftFinish = false;
+        }
+        if (lastRightFinish)
+        {
+            CmdFinishHand(1);
+            lastRightFinish = false;
+        }
+        if (lastLeftSet)
+        {
+            CmdSetLeapHand(0, lastLeftSetArr);
+            lastLeftSet = false;
+            lastLeftSetArr = null;
+        }
+        if (lastRightSet)
+        {
+            CmdSetLeapHand(1, lastRightSetArr);
+            lastRightSet = false;
+            lastRightSetArr = null;
+        }
+    }
+
     public LeapHand leftHand;
     public LeapHand rightHand;
 
     private float leftLastTime = -1f;
     private float rightLastTime = -1f;
 
+    private bool lastLeftFinish = false;
+    private bool lastRightFinish = false;
+
+    private bool lastLeftSet = false;
+    private byte[] lastLeftSetArr = null;
+    private bool lastRightSet = false;
+    private byte[] lastRightSetArr = null;
+
     public void FinishHand(int hand)
     {
-        CmdFinishHand(hand);
+        if (hand == 0)
+        {
+            lastLeftFinish = true;
+        }
+        else
+        {
+            lastRightFinish = true;
+        }
     }
 
     public void SetLeapHand(int hand, byte[] arrHand)
@@ -24,7 +71,8 @@ public class LeapPlayer : NetworkBehaviour
         {
             if (leftLastTime + delay < Time.realtimeSinceStartup)
             {
-                CmdSetLeapHand(hand, arrHand);
+                lastLeftSet = true;
+                lastLeftSetArr = arrHand;
                 leftLastTime = Time.realtimeSinceStartup;
             }
         }
@@ -32,7 +80,8 @@ public class LeapPlayer : NetworkBehaviour
         {
             if (rightLastTime + delay < Time.realtimeSinceStartup)
             {
-                CmdSetLeapHand(hand, arrHand);
+                lastRightSet = true;
+                lastRightSetArr = arrHand;
                 rightLastTime = Time.realtimeSinceStartup;
             }
         }
@@ -41,6 +90,7 @@ public class LeapPlayer : NetworkBehaviour
     [Command]
     public void CmdFinishHand(int hand)
     {
+        Debug.Log("Finish Hand" + hand);
         if (hand == 0)
         {
             leftHand.FinishHand();
@@ -53,7 +103,8 @@ public class LeapPlayer : NetworkBehaviour
 
     [Command]
     public void CmdSetLeapHand(int hand, byte[] arrHand)
-    {        
+    {
+        Debug.Log("Set Hand" + hand + " with " + arrHand.Length);
         if (hand == 0)
         {
             leftHand.SetLeapHand(arrHand);

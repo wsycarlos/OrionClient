@@ -8,6 +8,8 @@ namespace LeapNet
     {
         public bool isDebug = false;
 
+        //public GameObject player;
+
         void Start()
         {
             if (isDebug)
@@ -24,6 +26,7 @@ namespace LeapNet
 
         public override void OnClientConnect(NetworkConnection conn)
         {
+            ClientScene.AddPlayer(client.connection, 0);
             Debug.Log("Server Connected!");
         }
 
