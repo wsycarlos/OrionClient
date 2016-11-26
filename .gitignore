@@ -1,0 +1,9 @@
+*.suo
+*.sln
+Library
+Temp
+client_Data
+release_Data
+*.exe
+*.csproj
+.vs
