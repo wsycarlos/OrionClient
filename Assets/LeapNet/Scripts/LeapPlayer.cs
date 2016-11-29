@@ -9,7 +9,7 @@ public class LeapPlayer : NetworkBehaviour
     public void Start()
     {
         Debug.Log("Leap Player Start");
-        Application.targetFrameRate = 30;
+        Application.targetFrameRate = 20;
     }
 
     public LeapHand leftHand;
@@ -33,15 +33,11 @@ public class LeapPlayer : NetworkBehaviour
 
     public void SetLeapHand(int hand, byte[] arrHand)
     {
-        Debug.Log("Set Hand:" + hand + " with " + arrHand.Length);
-
         CmdSetLeapHand(hand, arrHand);
     }
 
     public void SendAudio(float[] f, int chan)
     {
-        Debug.Log("Set Audio:" + chan + " with " + f.Length);
-
         CmdAudioSend(f, chan);
     }
 
