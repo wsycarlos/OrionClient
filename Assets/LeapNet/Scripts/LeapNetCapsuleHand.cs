@@ -102,10 +102,21 @@ namespace LeapNet
 
         public override void SetLeapHand(Hand hand)
         {
-            hand_ = hand;
-            if (hand != null&&player!=null)
+            if (hand_ == null)
             {
-                player.SetLeapHand((int)Handedness, LeapHandData.Serialize(hand));
+                hand_ = hand;
+                if (hand != null && player != null)
+                {
+                    player.BeginHand((int)Handedness, LeapHandData.Serialize(hand));
+                }
+            }
+            else
+            {
+                hand_ = hand;
+                if (hand != null && player != null)
+                {
+                    player.SetLeapHand((int)Handedness, LeapHandData.Serialize(hand));
+                }
             }
         }
 
@@ -196,6 +207,7 @@ namespace LeapNet
             if (player != null)
             {
                 player.FinishHand((int)Handedness);
+                hand_ = null;
             }
             base.FinishHand();
         }
