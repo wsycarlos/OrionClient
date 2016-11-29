@@ -26,7 +26,7 @@ public class LeapAudio : MonoBehaviour
 
     void Start()
     {
-        c = Microphone.Start(null, true, 1000, FREQUENCY);
+        c = Microphone.Start(null, true, 20000, FREQUENCY);
         while (Microphone.GetPosition(null) < 0) { } // HACK from Riro
     }
 
