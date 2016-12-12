@@ -19,9 +19,11 @@ public class LeapPlayer : NetworkBehaviour
 
     public void BeginHand(int hand, byte[] arrHand)
     {
-        Debug.Log("Begin Hand:" + hand + " with " + arrHand.Length);
+        byte[] newHand = CLZF.Compress(arrHand);
 
-        CmdBeginHand(hand, arrHand);
+        Debug.Log("Begin Hand:" + hand + " from " + arrHand.Length + " to " + newHand.Length);
+
+        CmdBeginHand(hand, newHand);
     }
 
     public void FinishHand(int hand)
@@ -33,7 +35,9 @@ public class LeapPlayer : NetworkBehaviour
 
     public void SetLeapHand(int hand, byte[] arrHand)
     {
-        CmdSetLeapHand(hand, arrHand);
+        byte[] newHand = CLZF.Compress(arrHand);
+
+        CmdSetLeapHand(hand, newHand);
     }
 
     public void SendAudio(float[] f, int chan)
