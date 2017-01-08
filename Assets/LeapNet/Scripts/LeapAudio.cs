@@ -16,37 +16,32 @@ public class LeapAudio : MonoBehaviour
         }
     }
 
-    float delay = 1f;
-    float last = -1f;
-
-    int lastSample;
+    int lengthSec = 1;
+    
     AudioClip c;
     
-    private const int FREQUENCY = 11025;
+    private const int FREQUENCY = 22050;
 
     void Start()
     {
-        c = Microphone.Start(null, true, 20000, FREQUENCY);
-        while (Microphone.GetPosition(null) < 0) { } // HACK from Riro
+        c = Microphone.Start(null, false, lengthSec, FREQUENCY);
+        //while (Microphone.GetPosition(null) < 0) { } // HACK from Riro
     }
 
     void Update()
     {
-        if (last + delay < Time.realtimeSinceStartup)
+        if (!Microphone.IsRecording(null))
         {
-            int pos = Microphone.GetPosition(null);
-            int diff = pos - lastSample;
-            if (diff > 0)
+            if (c.samples > 0)
             {
-                float[] samples = new float[diff * c.channels];
-                c.GetData(samples, lastSample);
+                float[] samples = new float[c.samples * c.channels];
+                c.GetData(samples, 0);
                 if (player != null)
                 {
                     player.SendAudio(samples, c.channels);
                 }
             }
-            lastSample = pos;
-            last = Time.realtimeSinceStartup;
+            c = Microphone.Start(null, false, lengthSec, FREQUENCY);
         }
     }
 

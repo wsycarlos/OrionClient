@@ -55,6 +55,41 @@ public static class CLZF
         return outputBytes;
     }
 
+    public static byte[] CompressAudio(float[] inputFloats)
+    {
+        return Compress(ToByteArray(inputFloats));
+    }
+
+    public static float[] DecompressAudio(byte[] inputBytes)
+    {
+        return ToFloatArray(Decompress(inputBytes));
+    }
+
+    private static byte[] ToByteArray(float[] floatArray)
+    {
+        int len = floatArray.Length * 4;
+        byte[] byteArray = new byte[len];
+        int pos = 0;
+        foreach (float f in floatArray)
+        {
+            byte[] data = System.BitConverter.GetBytes(f);
+            System.Array.Copy(data, 0, byteArray, pos, 4);
+            pos += 4;
+        }
+        return byteArray;
+    }
+
+    private static float[] ToFloatArray(byte[] byteArray)
+    {
+        int len = byteArray.Length / 4;
+        float[] floatArray = new float[len];
+        for (int i = 0; i < byteArray.Length; i += 4)
+        {
+            floatArray[i / 4] = System.BitConverter.ToSingle(byteArray, i);
+        }
+        return floatArray;
+    }
+
     /// <summary>
     /// Compresses the data using LibLZF algorithm
     /// </summary>

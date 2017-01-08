@@ -42,7 +42,11 @@ public class LeapPlayer : NetworkBehaviour
 
     public void SendAudio(float[] f, int chan)
     {
-        CmdAudioSend(f, chan);
+        byte[] newBytes = CLZF.CompressAudio(f);
+
+        //Debug.Log("Audio Length:" + newBytes.Length);
+
+        CmdAudioSend(newBytes, chan);
     }
 
     [Command(channel = 0)]
@@ -55,5 +59,5 @@ public class LeapPlayer : NetworkBehaviour
     public void CmdSetLeapHand(int hand, byte[] arrHand) { }
 
     [Command(channel = 2)]
-    public void CmdAudioSend(float[] f, int chan) { }
+    public void CmdAudioSend(byte[] f, int chan) { }
 }
